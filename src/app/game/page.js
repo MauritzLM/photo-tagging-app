@@ -1,10 +1,28 @@
 'use client'
 import Nav from "../components/nav"
 import GameTimer from "../components/timer"
-import pic1 from "../../../public/images/pic-1.jpg"
-import pic2 from "../../../public/images/pic-2.jpg"
+import img1 from "../../../public/images/image-1.jpg"
+import img2 from "../../../public/images/pic-2.jpg"
+import img3 from "../../../public/images/pic-1.jpg"
 import { useEffect, useState, useRef, useLayoutEffect } from "react"
 import Image from "next/image"
+
+// images, add characters array to object*
+const image1 = {
+    src: img1.src,
+    name: 'image1',
+    characters: []
+}
+
+const image2 = {
+    src: img2.src,
+    name: 'image2'
+}
+
+const image3 = {
+    src: img3.src,
+    name: 'image3'
+}
 
 export default function Game() {
     const ref = useRef(null);
@@ -12,10 +30,11 @@ export default function Game() {
     // start game state
     const [gameStart, setGameStart] = useState(false);
     // game image
-    const [gameImage, setGameImage] = useState(pic1);
+    const [gameImage, setGameImage] = useState({ ...image1 });
 
     // number of characters found state*
     // if all characters found update state, ui etc*
+    const [charactersFound, setCharactersFound] = useState([]);
 
     // paused state
     const [gamePause, setGamePause] = useState(false);
@@ -51,22 +70,60 @@ export default function Game() {
     }
 
     // selecting character from box
-    function handleFormSubmit(e) {
-        e.preventDefault();
+    async function handleFormSubmit(event) {
+        try {
+            event.preventDefault();
 
-        // 1. get coords of cursor/click*
-        // calculate x and y values*
-        let x_percentage = clickCoords.x / imageWidth;
+            // 1. get coords of cursor/click*
+            // calculate x and y values*
+            let x_percentage = clickCoords.x / imageWidth;
+            let y_percetage = clickCoords.y / imageHeight;
 
-        console.log(Math.floor(x_percentage * 100));
+            console.log(Math.floor(x_percentage * 100), Math.floor(y_percetage * 100));
 
-        // 2. make call to backend*(check if values are within bounds)
+            // get form data
+            const form = event.target;
+            // const formData = new FormData(form); ?
 
-        // handle result, update game state*
+            // req body
+            let user_selection = {
+                x: Math.floor(x_percentage * 100),
+                y: Math.floor(y_percetage * 100),
+                image: gameImage.name,   // how to get correct value?*
+                character: 'walrus' // how to get this value?*
+            };
 
-        // change z-index of popup
-        setPopupZIndex(-10);
+            // fetch request to check selection made by user
+            let response = await fetch('http://localhost:3002/gameimage', {
+                method: form.method,
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8'
+                  },
+                body: JSON.stringify(user_selection)
+            });
 
+            // handle result, update game state*
+            let result = await response.json();
+
+            // update state if correct selection
+            //  display selection message*
+            if (result) {
+                setCharactersFound([...charactersFound, user_selection.character]);
+            };
+
+            // if characters found length == 3 then gameover*
+
+            console.log(result);
+
+            // change z-index of popup
+            setPopupZIndex(-10);
+
+            return;
+
+        } catch (error) {
+            console.log(error);
+            return;
+        }
     }
 
 
@@ -79,13 +136,16 @@ export default function Game() {
                     <p>select image</p>
                     <div className="flex gap-4">
 
-                        <picture className="w-96 h-96" onClick={() => handleGameStart(pic1)}>
-                            <Image src={pic1.src} alt="" width={500} height={500} className="w-full h-full" />
-                            {/* <img className="w-full h-full" src={pic1.src} alt="" /> */}
+                        <picture className="w-96 h-96" onClick={() => handleGameStart(image1)}>
+                            <Image src={image1.src} alt="" width={500} height={500} className="w-full h-full" />
                         </picture>
-                        <picture className="w-96 h-96" onClick={() => handleGameStart(pic2)}>
-                            {/* <img className="w-full h-full" src={pic2.src} alt="" /> */}
-                            <Image src={pic2.src} alt="" width={500} height={500} className="w-full h-full" />
+
+                        <picture className="w-96 h-96" onClick={() => handleGameStart(image2)}>
+                            <Image src={image2.src} alt="" width={500} height={500} className="w-full h-full" />
+                        </picture>
+
+                        <picture className="w-96 h-96" onClick={() => handleGameStart(image3)}>
+                            <Image src={image3.src} alt="" width={500} height={500} className="w-full h-full" />
                         </picture>
 
                     </div>
@@ -177,7 +237,7 @@ function GameImage({ gameImage, setCoords, setImageWidth, setImageHeight }) {
 function SelectOptions({ x, y, z, handleFormSubmit }) {
     return (
         <>
-            <form className="flex flex-col bg-neutral-300 w-40 absolute" style={{ top: `${y}px`, left: `${x}px`, zIndex: z }} onSubmit={(e) => handleFormSubmit(e)}>
+            <form method="post" className="flex flex-col bg-neutral-300 w-40 absolute" style={{ top: `${y}px`, left: `${x}px`, zIndex: z }} onSubmit={(e) => handleFormSubmit(e)}>
                 <button>character 1</button>
                 <button>character 2</button>
                 <button>character 3</button>
