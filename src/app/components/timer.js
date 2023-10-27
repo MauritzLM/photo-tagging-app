@@ -1,21 +1,19 @@
 import { useState,useEffect } from "react";
 
 // game timer
-export default function GameTimer({ gameStart, gamePause }) {
+export default function GameTimer({ gameStart}) {
 
     const [time, setTime] = useState(0);
     // const [running, setRunning] = useState(true);
     useEffect(() => {
         let interval;
-        if (!gamePause) {
+    
             interval = setInterval(() => {
                 setTime((prevTime) => prevTime + 10);
             }, 10);
-        } else if (gamePause) {
-            clearInterval(interval);
-        }
+        
         return () => clearInterval(interval);
-    }, [gamePause]);
+    }, []);
 
 
     return (
