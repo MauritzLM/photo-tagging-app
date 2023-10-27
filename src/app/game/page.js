@@ -1,34 +1,39 @@
 'use client'
 import Nav from "../components/nav"
 import GameTimer from "../components/timer"
+import { updateSelection } from "@/utils/utils"
 import img1 from "../../../public/images/image-1.jpg"
 import img2 from "../../../public/images/pic-2.jpg"
 import img3 from "../../../public/images/pic-1.jpg"
 import { useEffect, useState, useRef, useLayoutEffect } from "react"
 import Image from "next/image"
 
-// images, add characters array to object*
+// game image objects, add characters array to object*
 const image1 = {
     src: img1.src,
     name: 'image1',
-    characters: []
+    characters: ['walrus']
 }
 
 const image2 = {
     src: img2.src,
-    name: 'image2'
+    name: 'image2',
+    characters: []
 }
 
 const image3 = {
     src: img3.src,
-    name: 'image3'
+    name: 'image3',
+    characters: []
 }
 
 export default function Game() {
-    const ref = useRef(null);
-
     // start game state
     const [gameStart, setGameStart] = useState(false);
+    
+    // gameover state
+    const [gameOver, setGameOver] = useState(false);
+
     // game image
     const [gameImage, setGameImage] = useState({ ...image1 });
 
@@ -36,14 +41,14 @@ export default function Game() {
     // if all characters found update state, ui etc*
     const [charactersFound, setCharactersFound] = useState([]);
 
-    // paused state
-    const [gamePause, setGamePause] = useState(false);
+    // selected character
+    const [selectedCharacter, setSelectedCharacter] = useState('');
 
     // popup box coords and z-index
     const [clickCoords, setClickCoords] = useState({ x: 5, y: 5 });
     const [popupZIndex, setPopupZIndex] = useState(-10);
 
-    // image width (pass set function to gameimage component)
+    // image dimensions
     const [imageWidth, setImageWidth] = useState(0);
     const [imageHeight, setImageHeight] = useState(0);
 
@@ -59,7 +64,7 @@ export default function Game() {
     // send request to server to record end time and calculate game time*
 
 
-    // clicking on image displays options box at cursor
+    // set coords of click
     function setCoords(e) {
 
         // update position of box
@@ -69,28 +74,34 @@ export default function Game() {
         (popupZIndex === -10 ? setPopupZIndex(10) : setPopupZIndex(-10));
     }
 
-    // selecting character from box
+    // update character selection
+    function handleSelection(event) {
+        setSelectedCharacter(event.target.value);
+    }
+
+    // submit selection function
     async function handleFormSubmit(event) {
         try {
             event.preventDefault();
 
-            // 1. get coords of cursor/click*
-            // calculate x and y values*
+            // get coords of cursor/click
+            // calculate x and y values
             let x_percentage = clickCoords.x / imageWidth;
             let y_percetage = clickCoords.y / imageHeight;
 
             console.log(Math.floor(x_percentage * 100), Math.floor(y_percetage * 100));
 
-            // get form data
-            const form = event.target;
-            // const formData = new FormData(form); ?
+            console.log(selectedCharacter)
 
-            // req body
+            // form
+            const form = event.target;
+
+            // create request body
             let user_selection = {
                 x: Math.floor(x_percentage * 100),
                 y: Math.floor(y_percetage * 100),
-                image: gameImage.name,   // how to get correct value?*
-                character: 'walrus' // how to get this value?*
+                image: gameImage.name,
+                character: selectedCharacter,
             };
 
             // fetch request to check selection made by user
@@ -98,7 +109,7 @@ export default function Game() {
                 method: form.method,
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
-                  },
+                },
                 body: JSON.stringify(user_selection)
             });
 
@@ -107,15 +118,19 @@ export default function Game() {
 
             // update state if correct selection
             //  display selection message*
-            if (result) {
-                setCharactersFound([...charactersFound, user_selection.character]);
+            if (result && updateSelection(selectedCharacter, charactersFound)) {
+                setCharactersFound([...charactersFound, selectedCharacter]);
             };
 
             // if characters found length == 3 then gameover*
+            if(charactersFound.length === 3) {
+                // set game over
+                setGameOver(true);
+            };
 
             console.log(result);
 
-            // change z-index of popup
+            // change z-index of popup to hide it
             setPopupZIndex(-10);
 
             return;
@@ -134,7 +149,7 @@ export default function Game() {
                 <main className="flex flex-col items-center">
                     <h1 className="font-bold text-2xl">Game page</h1>
                     <p>select image</p>
-                    <div className="flex gap-4">
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
 
                         <picture className="w-96 h-96" onClick={() => handleGameStart(image1)}>
                             <Image src={image1.src} alt="" width={500} height={500} className="w-full h-full" />
@@ -157,14 +172,15 @@ export default function Game() {
             <>
                 <Nav />
                 <main className="flex flex-col items-center p-4">
-                    <GameTimer gameStart={gameStart} gamePause={gamePause} />
+                    <GameTimer gameStart={gameStart} />
                     <h1 className="font-bold text-2xl">Game page</h1>
+                    <p>characters found: {charactersFound.length}</p>
 
                     <div className="relative w-full h-full">
 
-                        <GameImage gameImage={gameImage} setCoords={setCoords} setImageWidth={setImageWidth} setImageHeight={setImageHeight} />
+                        <GameImage gameImage={gameImage} setCoords={setCoords} setImageWidth={setImageWidth} setImageHeight={setImageHeight} imageWidth={imageWidth} />
 
-                        <SelectOptions x={clickCoords.x} y={clickCoords.y} z={popupZIndex} handleFormSubmit={handleFormSubmit} />
+                        <SelectOptions x={clickCoords.x} y={clickCoords.y} z={popupZIndex} handleFormSubmit={handleFormSubmit} gameImage={gameImage} handleSelection={handleSelection} />
 
                     </div>
                 </main>
@@ -199,17 +215,23 @@ function GameInstructions() {
 }
 
 // game image component
-function GameImage({ gameImage, setCoords, setImageWidth, setImageHeight }) {
+function GameImage({ gameImage, setCoords, setImageWidth, setImageHeight, imageWidth }) {
     const ref = useRef(null)
 
     // get image width and height
     useLayoutEffect(() => {
-        setImageWidth(ref.current.offsetWidth);
-        setImageHeight(ref.current.offsetHeight);
+
+        // use settimeout to get correct values
+        setTimeout(() => {
+            setImageWidth(ref.current.offsetWidth);
+            setImageHeight(ref.current.offsetHeight);
+        }, 100)
+
     }, []);
 
     // handle resizing of window
     useEffect(() => {
+
         function handleWindowResize() {
             setImageWidth(ref.current.offsetWidth);
             setImageHeight(ref.current.offsetHeight);
@@ -221,24 +243,23 @@ function GameImage({ gameImage, setCoords, setImageWidth, setImageHeight }) {
         return () => {
             window.removeEventListener('resize', handleWindowResize);
         };
-    }, []);
+    }, [setImageHeight, setImageWidth]);
 
     return (
         <picture className="w-full h-full" onClick={(e) => setCoords(e)}>
-            <Image ref={ref} src={gameImage.src} alt="" width={800} height={800} className="w-full h-full" />
+            <Image ref={ref} src={gameImage.src} alt="" height={800} width={800} className="w-full h-full" />
         </picture>
     )
 }
 
 
-
-// on submit check if correct and display result*
 // selection popup
-function SelectOptions({ x, y, z, handleFormSubmit }) {
+function SelectOptions({ x, y, z, handleFormSubmit, gameImage, handleSelection }) {
+
     return (
         <>
             <form method="post" className="flex flex-col bg-neutral-300 w-40 absolute" style={{ top: `${y}px`, left: `${x}px`, zIndex: z }} onSubmit={(e) => handleFormSubmit(e)}>
-                <button>character 1</button>
+                <button name="character" value={gameImage.characters[0]} type="submit" onClick={handleSelection}>{gameImage.characters[0]}</button>
                 <button>character 2</button>
                 <button>character 3</button>
             </form>
