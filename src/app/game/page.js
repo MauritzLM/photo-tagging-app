@@ -3,12 +3,15 @@ import Nav from "../components/nav"
 import GameTimer from "../components/timer"
 import GameImage from "../components/gameImage"
 import SelectOptions from "../components/selectOptions"
+import GameEnd from "../components/gameEnd"
+import LeaderboardForm from "../components/leaderboardForm"
 import { updateSelection } from "@/utils/utils"
 import img1 from "../../../public/images/image-1.jpg"
 import img2 from "../../../public/images/pic-2.jpg"
 import img3 from "../../../public/images/pic-1.jpg"
 import { useEffect, useState, useRef, useLayoutEffect } from "react"
 import Image from "next/image"
+import { v4 as uuidv4 } from 'uuid';
 
 
 // game image objects, add characters array to object*
@@ -33,12 +36,15 @@ const image3 = {
 export default function Game() {
     // start game state
     const [gameStart, setGameStart] = useState(false);
-    
+
     // game image selected
     const [gameImage, setGameImage] = useState({ ...image1 });
 
+    // game instance
+    const [gameInstance, setGameInstance] = useState({ id: '', time: '' });
+
     // number of characters found 
-    const [charactersFound, setCharactersFound] = useState([]);
+    const [charactersFound, setCharactersFound] = useState(['char1', 'char2']);
 
     // character selected from popup
     const [selectedCharacter, setSelectedCharacter] = useState('');
@@ -51,16 +57,57 @@ export default function Game() {
     const [imageWidth, setImageWidth] = useState(0);
     const [imageHeight, setImageHeight] = useState(0);
 
+
     // handle starting game
-    function handleGameStart(img) {
+    async function handleGameStart(img) {
         setGameStart(true);
         setGameImage(img);
 
-        // send request to server to record start time*
+        // create id for game instance
+        const id = uuidv4();
+        setGameInstance({ ...gameInstance, id: id });
+
+        try {
+            // send req to record start time
+            let response = await fetch('http://localhost:3002/gamestart', {
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8'
+                },
+                body: JSON.stringify({ id: id, image: img.name })
+            });
+
+            console.log(response);
+
+        }
+        catch (error) {
+            console.log(error)
+            return;
+        }
     }
 
     // handle end game
-    // send request to server to record end time and calculate game time*
+    async function handleGameEnd(id) {
+        try {
+            // send request to server to calculate time
+            let response = await fetch('http://localhost:3002/gameend', {
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8'
+                },
+                body: JSON.stringify({ id: id })
+            });
+
+            const result = await response.json();
+            
+            // set game time
+            setGameInstance({...gameInstance, time: result})
+
+        }
+        catch (error) {
+            console.log(error)
+        }
+    }
 
 
     // set coords of click
@@ -119,8 +166,6 @@ export default function Game() {
             //  display selection message*
             if (result && updateSelection(selectedCharacter, charactersFound)) {
                 setCharactersFound([...charactersFound, selectedCharacter]);
-
-                // check if gameover -> if true send request to server to send back game time*
             };
 
             console.log(result);
@@ -137,13 +182,12 @@ export default function Game() {
     }
 
     // if gameover (all characters found)
-    // display game time*
-    // display form to add name to leaderboard*
-    if(charactersFound.length === 3) {
-        return(
+    if (charactersFound.length === 3) {
+        return (
             <>
-            <Nav />
-            <h1>Game Over</h1>
+                <Nav />
+                <GameEnd handleGameEnd={handleGameEnd} gameInstance={gameInstance} />
+                <LeaderboardForm image={gameImage.name} gameInstance={gameInstance} />
             </>
         )
     }
