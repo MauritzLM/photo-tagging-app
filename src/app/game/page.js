@@ -58,7 +58,7 @@ export default function Game() {
     const [imageHeight, setImageHeight] = useState(0);
 
 
-    // handle starting game
+    // handle starting a game
     async function handleGameStart(img) {
         setGameStart(true);
         setGameImage(img);
@@ -107,6 +107,12 @@ export default function Game() {
         catch (error) {
             console.log(error)
         }
+    }
+
+    // handle new game
+    function handleNewGame() {
+        setCharactersFound([]);
+        setGameStart(false);
     }
 
 
@@ -182,12 +188,13 @@ export default function Game() {
     }
 
     // if gameover (all characters found)
+    // start new game link*
     if (charactersFound.length === 3) {
         return (
             <>
                 <Nav />
                 <GameEnd handleGameEnd={handleGameEnd} gameInstance={gameInstance} />
-                <LeaderboardForm image={gameImage.name} gameInstance={gameInstance} />
+                <LeaderboardForm image={gameImage.name} gameInstance={gameInstance} handleNewGame={handleNewGame} />
             </>
         )
     }
