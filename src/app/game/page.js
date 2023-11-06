@@ -5,8 +5,9 @@ import GameImage from "../components/gameImage"
 import SelectOptions from "../components/selectOptions"
 import GameEnd from "../components/gameEnd"
 import LeaderboardForm from "../components/leaderboardForm"
+import Marker from "../components/marker"
 import { updateSelection } from "@/utils/utils"
-import img1 from "../../../public/images/image-1.jpg"
+import { image1 } from "../../utils/imageData"
 import img2 from "../../../public/images/pic-2.jpg"
 import img3 from "../../../public/images/pic-1.jpg"
 import { useEffect, useState, useRef, useLayoutEffect } from "react"
@@ -14,13 +15,7 @@ import Image from "next/image"
 import { v4 as uuidv4 } from 'uuid';
 
 
-// game image objects, add characters array to object*
-const image1 = {
-    src: img1.src,
-    name: 'image1',
-    characters: ['walrus', 'lion', 'bear']
-}
-
+// game image objects*
 const image2 = {
     src: img2.src,
     name: 'image2',
@@ -44,19 +39,23 @@ export default function Game() {
     const [gameInstance, setGameInstance] = useState({ id: '', time: '' });
 
     // number of characters found 
-    const [charactersFound, setCharactersFound] = useState(['char1', 'char2']);
+    const [charactersFound, setCharactersFound] = useState([]);
+
+    // correct selection markers
+    const [marker1, setMarker1] = useState({ x: 0, y: 0, display: 'none' });
+    const [marker2, setMarker2] = useState({ x: 0, y: 0, display: 'none' });
+    const [marker3, setMarker3] = useState({ x: 0, y: 0, display: 'none' });
 
     // character selected from popup
     const [selectedCharacter, setSelectedCharacter] = useState('');
 
     // popup box coords, z-index and click coords 
-    const [clickCoords, setClickCoords] = useState({ x: 5, y: 5 });
+    const [clickCoords, setClickCoords] = useState({ x: 50, y: 50 });
     const [popupZIndex, setPopupZIndex] = useState(-10);
 
     // image dimensions
     const [imageWidth, setImageWidth] = useState(0);
     const [imageHeight, setImageHeight] = useState(0);
-
 
     // handle starting a game
     async function handleGameStart(img) {
@@ -99,9 +98,9 @@ export default function Game() {
             });
 
             const result = await response.json();
-            
+
             // set game time
-            setGameInstance({...gameInstance, time: result})
+            setGameInstance({ ...gameInstance, time: result })
 
         }
         catch (error) {
@@ -169,9 +168,23 @@ export default function Game() {
             let result = await response.json();
 
             // update state if correct selection
-            //  display selection message*
+            //  display marker for correct selection*
             if (result && updateSelection(selectedCharacter, charactersFound)) {
                 setCharactersFound([...charactersFound, selectedCharacter]);
+
+                // update marker display for selected character
+                switch (selectedCharacter) {
+                    case gameImage.characters[0]:
+                        setMarker1({ x: clickCoords.x, y: clickCoords.y, display: 'block' });
+                        break;
+                    case gameImage.characters[1]:
+                        setMarker2({ x: clickCoords.x, y: clickCoords.y, display: 'block' });
+                        break;
+                    case gameImage.characters[2]:
+                        setMarker3({ x: clickCoords.x, y: clickCoords.y, display: 'block' });
+                        break;
+                }
+
             };
 
             console.log(result);
@@ -188,7 +201,6 @@ export default function Game() {
     }
 
     // if gameover (all characters found)
-    // start new game link*
     if (charactersFound.length === 3) {
         return (
             <>
@@ -204,10 +216,13 @@ export default function Game() {
         return (
             <>
                 <Nav />
+
                 <main className="flex flex-col items-center">
                     <h1 className="font-bold text-2xl">Game page</h1>
                     <p>select image</p>
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+
+                    {/* can move this to a component* */}
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 p-4">
 
                         <picture className="w-96 h-96" onClick={() => handleGameStart(image1)}>
                             <Image src={image1.src} alt="" width={500} height={500} className="w-full h-full" />
@@ -232,7 +247,13 @@ export default function Game() {
                 <main className="flex flex-col items-center p-4">
                     <GameTimer gameStart={gameStart} />
                     <h1 className="font-bold text-2xl">Game page</h1>
-                    <p>characters found: {charactersFound.length}</p>
+                    <p>characters to find:</p>
+
+                    {/* adjust position of characters to find, add style if character found* */}
+                    <div className="flex gap-4">
+                        {gameImage.characters?.map((character, index) =>
+                            <p key={`char-${index}`}>{character}</p>)}
+                    </div>
 
                     <div className="relative w-full h-full">
 
@@ -240,6 +261,10 @@ export default function Game() {
 
                         <SelectOptions x={clickCoords.x} y={clickCoords.y} z={popupZIndex} handleFormSubmit={handleFormSubmit} gameImage={gameImage} handleSelection={handleSelection} />
 
+                        {/* update character values to image obj values* */}
+                        <Marker character={gameImage.characters[0]} x={marker1.x} y={marker1.y} display={marker1.display} />
+                        <Marker character={'char2'} x={marker2.x} y={marker2.y} display={marker2.display} />
+                        <Marker character={'char3'} x={marker3.x} y={marker3.y} display={marker3.display} />
                     </div>
                 </main>
 
@@ -247,29 +272,6 @@ export default function Game() {
         )
     }
 
-}
-
-
-// create game instructions popup* (optional)
-// display which characters need to be found
-// button to start game and timer 
-function GameInstructions() {
-    return (
-        <>
-            <div className="flex gap-2 absolute">
-
-                <div>
-                    <h2>Game instructions</h2>
-                    <p>find these characters</p>
-                </div>
-
-                <div>
-                    <p>character-1</p>
-                    <p>character-2</p>
-                </div>
-            </div>
-        </>
-    )
 }
 
 
