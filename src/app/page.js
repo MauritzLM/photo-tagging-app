@@ -7,6 +7,7 @@ export default function Home() {
       <Nav />
       <main className="flex flex-col items-center">
         <h1 className="font-bold text-2xl">Photo tagging app</h1>
+        {/* add game instructions/description */}
       </main>
     </>
   )
