@@ -249,10 +249,10 @@ export default function Game() {
                     <h1 className="font-bold text-2xl">Game page</h1>
                     <p>characters to find:</p>
 
-                    {/* adjust position of characters to find, add style if character found* */}
+                    {/* adjust position of characters to find, maybe add checkbox */}
                     <div className="flex gap-4">
                         {gameImage.characters?.map((character, index) =>
-                            <p key={`char-${index}`}>{character}</p>)}
+                            <p className={charactersFound.includes(character) ? 'line-through' : ''} key={`char-${index}`}>{character}</p>)}
                     </div>
 
                     <div className="relative w-full h-full">
