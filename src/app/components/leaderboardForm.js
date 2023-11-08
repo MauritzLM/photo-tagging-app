@@ -59,7 +59,7 @@ export default function LeaderboardForm({ gameInstance, handleNewGame }) {
         return (
             <>
                 <h2>Enter your name to submit your time</h2>
-                <form onSubmit={(e) => handleSubmit(e, gameInstance)} className="flex flex-col items-center gap-4 max-w-md p-4 border-solid border-2" method="post">
+                <form data-testid="leaderboard-form" onSubmit={(e) => handleSubmit(e, gameInstance)} className="flex flex-col items-center gap-4 max-w-md p-4 border-solid border-2" method="post">
 
                     <div className="flex flex-col gap-2 w-3/5">
                         <label htmlFor="name">Name</label>
