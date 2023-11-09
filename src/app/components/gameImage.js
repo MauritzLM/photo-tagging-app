@@ -34,7 +34,7 @@ export default function GameImage({ gameImage, setCoords, setImageWidth, setImag
 
     return (
         <>
-            <picture className="w-full h-full" onClick={(e) => setCoords(e)}>
+            <picture data-testid="picture" className="w-full h-full" onClick={(e) => setCoords(e)}>
                 <Image ref={ref} src={gameImage.src} alt="" height={800} width={800} className="w-full h-full" />
             </picture>
         </>

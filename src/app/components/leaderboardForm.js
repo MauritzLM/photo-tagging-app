@@ -65,7 +65,7 @@ export default function LeaderboardForm({ gameInstance, handleNewGame }) {
                         <label htmlFor="name">Name</label>
                         <span>(1-20 characters)</span>
                         <input type="text" name="name" id="name" className="border-solid border-2 border-black-600" value={playerName} onChange={handleChange} />
-                        <span>{inputError}</span>
+                        <span data-testid="error-msg">{inputError}</span>
                     </div>
 
                     <button className="w-3/5">Submit</button>
