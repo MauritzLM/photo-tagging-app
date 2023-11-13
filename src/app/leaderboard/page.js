@@ -5,12 +5,11 @@ import DisplayLeaderboard from "../components/leaderboard";
 
 export default function LeaderboardPage() {
 
-    // leaderboard state* (add current selection to change styles)
+    // leaderboard state
     const [leaderboard, setLeaderboard] = useState([]);
+    const [showLeaderboard, setShowLeaderboard] = useState('');
 
-    // handle button click*
-
-    // function to fetch leaderboard*
+    // function to fetch leaderboard
     async function getLeaderboard(image) {
         try {
 
@@ -26,6 +25,7 @@ export default function LeaderboardPage() {
             const result = await respone.json();
 
             setLeaderboard([...result]);
+            setShowLeaderboard(image);
             
         }
         catch (error) {
@@ -33,21 +33,20 @@ export default function LeaderboardPage() {
         }
     }
 
-    useEffect(() => {
-        getLeaderboard('image1')
-    }, []);
-
     return (
         <>
             <Nav />
             <h1>Leaderboards page</h1>
+
+            <p>Select a leaderboard to display</p>
+
             <div>
-                <button>Image 1</button>
-                <button>Image 2</button>
-                <button>Image 3</button>
+                <button className={showLeaderboard === 'image1' ? 'bg-slate-500 text-white' : ''} onClick={() => getLeaderboard('image1')}>Image 1</button>
+                <button className={showLeaderboard === 'image2' ? 'bg-slate-500 text-white' : ''} onClick={() => getLeaderboard('image2')}>Image 2</button>
+                <button className={showLeaderboard === 'image3' ? 'bg-slate-500 text-white' : ''}>Image 3</button>
             </div>
 
-            <DisplayLeaderboard leaderboard={leaderboard}/>
+            <DisplayLeaderboard leaderboard={leaderboard} showLeaderboard={showLeaderboard}/>
         </>
     )
 }
