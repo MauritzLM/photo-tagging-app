@@ -1,36 +1,22 @@
 'use client'
-import Nav from "../components/nav"
-import GameTimer from "../components/timer"
-import GameImage from "../components/gameImage"
-import SelectOptions from "../components/selectOptions"
-import GameEnd from "../components/gameEnd"
-import LeaderboardForm from "../components/leaderboardForm"
-import Marker from "../components/marker"
-import { updateSelection } from "@/utils/utils"
-import { image1 } from "../../utils/imageData"
-import img2 from "../../../public/images/pic-2.jpg"
-import img3 from "../../../public/images/pic-1.jpg"
-import { useEffect, useState, useRef, useLayoutEffect } from "react"
-import Image from "next/image"
+import Nav from "../components/nav";
+import GameTimer from "../components/timer";
+import GameImage from "../components/gameImage";
+import SelectOptions from "../components/selectOptions";
+import GameEnd from "../components/gameEnd";
+import LeaderboardForm from "../components/leaderboardForm";
+import Marker from "../components/marker";
+import { updateSelection } from "@/utils/utils";
+import { image1, image2, image3 } from "../../utils/imageData";
+import { useEffect, useState, useRef, useLayoutEffect } from "react";
+import Image from "next/image";
 import { v4 as uuidv4 } from 'uuid';
 
-
-// game image objects*
-const image2 = {
-    src: img2.src,
-    name: 'image2',
-    characters: ['char1', 'char2', 'char3']
-}
-
-const image3 = {
-    src: img3.src,
-    name: 'image3',
-    characters: ['char4', 'char5', 'char6']
-}
 
 export default function Game() {
     // start game state
     const [gameStart, setGameStart] = useState(false);
+    // const [errorMsg, setErrorMsg] = useState('');
 
     // game image selected
     const [gameImage, setGameImage] = useState({ ...image1 });
@@ -59,7 +45,7 @@ export default function Game() {
 
     // handle starting a game
     async function handleGameStart(img) {
-        setGameStart(true);
+
         setGameImage(img);
 
         // create id for game instance
@@ -76,8 +62,15 @@ export default function Game() {
                 body: JSON.stringify({ id: id, image: img.name })
             });
 
-            console.log(response);
-
+            if (response.status === 200) {
+                setGameStart(true);
+                
+                return;
+            };
+ 
+            // what if server error?* message that game wont be recorded
+            // setErrorMsg('server offline')           
+            
         }
         catch (error) {
             console.log(error)
@@ -100,7 +93,7 @@ export default function Game() {
             const result = await response.json();
 
             // set game time
-            setGameInstance({ ...gameInstance, time: result })
+            setGameInstance({ ...gameInstance, time: result });
 
         }
         catch (error) {
@@ -164,11 +157,11 @@ export default function Game() {
                 body: JSON.stringify(user_selection)
             });
 
-            // handle result, update game state*
+            // handle result, update game state
             let result = await response.json();
 
             // update state if correct selection
-            //  display marker for correct selection*
+            //  display marker for correct selection
             if (result && updateSelection(selectedCharacter, charactersFound)) {
                 setCharactersFound([...charactersFound, selectedCharacter]);
 
@@ -219,9 +212,9 @@ export default function Game() {
 
                 <main className="flex flex-col items-center">
                     <h1 className="font-bold text-2xl">Game page</h1>
+                    {/* <p>{errorMsg}</p> */}
                     <p>select image</p>
 
-                    {/* can move this to a component* */}
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 p-4">
 
                         <picture className="w-96 h-96" onClick={() => handleGameStart(image1)}>
@@ -263,15 +256,14 @@ export default function Game() {
 
                         {/* update character values to image obj values* */}
                         <Marker character={gameImage.characters[0]} x={marker1.x} y={marker1.y} display={marker1.display} />
-                        <Marker character={'char2'} x={marker2.x} y={marker2.y} display={marker2.display} />
-                        <Marker character={'char3'} x={marker3.x} y={marker3.y} display={marker3.display} />
+                        <Marker character={gameImage.characters[1]} x={marker2.x} y={marker2.y} display={marker2.display} />
+                        <Marker character={gameImage.characters[2]} x={marker3.x} y={marker3.y} display={marker3.display} />
                     </div>
                 </main>
 
             </>
         )
     }
-
 }
 
 
