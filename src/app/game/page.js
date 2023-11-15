@@ -64,13 +64,13 @@ export default function Game() {
 
             if (response.status === 200) {
                 setGameStart(true);
-                
+
                 return;
             };
- 
+
             // what if server error?* message that game wont be recorded
             // setErrorMsg('server offline')           
-            
+
         }
         catch (error) {
             console.log(error)
@@ -167,13 +167,13 @@ export default function Game() {
 
                 // update marker display for selected character
                 switch (selectedCharacter) {
-                    case gameImage.characters[0]:
+                    case gameImage.characters[0].name:
                         setMarker1({ x: clickCoords.x, y: clickCoords.y, display: 'block' });
                         break;
-                    case gameImage.characters[1]:
+                    case gameImage.characters[1].name:
                         setMarker2({ x: clickCoords.x, y: clickCoords.y, display: 'block' });
                         break;
-                    case gameImage.characters[2]:
+                    case gameImage.characters[2].name:
                         setMarker3({ x: clickCoords.x, y: clickCoords.y, display: 'block' });
                         break;
                 }
@@ -237,16 +237,29 @@ export default function Game() {
         return (
             <>
                 <Nav />
-                <main className="flex flex-col items-center p-4">
-                    <GameTimer gameStart={gameStart} />
-                    <h1 className="font-bold text-2xl">Game page</h1>
-                    <p>characters to find:</p>
+                <main className="flex flex-col items-center gap-7 p-4 relative">
 
-                    {/* adjust position of characters to find, maybe add checkbox */}
-                    <div className="flex gap-4">
-                        {gameImage.characters?.map((character, index) =>
-                            <p className={charactersFound.includes(character) ? 'line-through' : ''} key={`char-${index}`}>{character}</p>)}
+                    <div className="flex flex-col md:flex-row w-full items-center justify-around gap-5">
+                        <GameTimer gameStart={gameStart} />
+
+                        <div className="flex flex-col gap-4">
+                            <p className="text-center text-xl font-medium">characters to find:</p>
+
+                            {/* adjust position of characters to find, maybe add checkbox */}
+                            <div className="flex items-end md:items-center gap-5">
+                                {gameImage.characters?.map((character, index) =>
+
+                                    <div key={character.name} className="flex flex-col  md:flex-row items-center gap-2">
+                                        <Image src={character.imageSrc} alt={character.name} width={30} height={30} />
+                                        <p className={charactersFound.includes(character.name) ? 'line-through' : ''} key={`char-${index}`}>{character.name}</p>
+                                    </div>
+                                    // 
+                                )}
+                            </div>
+                        </div>
                     </div>
+
+
 
                     <div className="relative w-full h-full">
 
@@ -255,9 +268,9 @@ export default function Game() {
                         <SelectOptions x={clickCoords.x} y={clickCoords.y} z={popupZIndex} handleFormSubmit={handleFormSubmit} gameImage={gameImage} handleSelection={handleSelection} />
 
                         {/* update character values to image obj values* */}
-                        <Marker character={gameImage.characters[0]} x={marker1.x} y={marker1.y} display={marker1.display} />
-                        <Marker character={gameImage.characters[1]} x={marker2.x} y={marker2.y} display={marker2.display} />
-                        <Marker character={gameImage.characters[2]} x={marker3.x} y={marker3.y} display={marker3.display} />
+                        <Marker character={gameImage.characters[0].name} x={marker1.x} y={marker1.y} display={marker1.display} />
+                        <Marker character={gameImage.characters[1].name} x={marker2.x} y={marker2.y} display={marker2.display} />
+                        <Marker character={gameImage.characters[2].name} x={marker3.x} y={marker3.y} display={marker3.display} />
                     </div>
                 </main>
 
