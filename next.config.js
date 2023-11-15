@@ -8,7 +8,7 @@ module.exports = {
           protocol: 'https',
           hostname: 'phototag-app-images.s3.eu-north-1.amazonaws.com',
           port: '',
-          pathname: '/image-*.jpg',
+          pathname: '/**',
         },
       ],
     },
