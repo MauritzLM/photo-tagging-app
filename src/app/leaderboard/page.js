@@ -41,9 +41,9 @@ export default function LeaderboardPage() {
             <h1 className="font-bold text-2xl text-center my-5">Select a leaderboard to display</h1>
 
             <div className="flex items-center gap-5">
-                <button className={showLeaderboard === 'image1' ? 'bg-slate-500 text-white p-3 border border-black rounded-lg' : ' p-3 border border-black rounded-lg'} onClick={() => getLeaderboard('image1')}>Image 1</button>
-                <button className={showLeaderboard === 'image2' ? 'bg-slate-500 text-white p-3 border border-black rounded-lg' : ' p-3 border border-black rounded-lg'} onClick={() => getLeaderboard('image2')}>Image 2</button>
-                <button className={showLeaderboard === 'image3' ? 'bg-slate-500 text-white p-3 border border-black rounded-lg' : ' p-3 border border-black rounded-lg'} onClick={() => getLeaderboard('image3')}>Image 3</button>
+                <button className={showLeaderboard === 'image1' ? 'bg-slate-500 text-white p-3 border border-gray-200 rounded-lg' : ' p-3 border border-gray-200 rounded-lg'} onClick={() => getLeaderboard('image1')}>Image 1</button>
+                <button className={showLeaderboard === 'image2' ? 'bg-slate-500 text-white p-3 border border-gray-200 rounded-lg' : ' p-3 border border-gray-200 rounded-lg'} onClick={() => getLeaderboard('image2')}>Image 2</button>
+                <button className={showLeaderboard === 'image3' ? 'bg-slate-500 text-white p-3 border border-gray-200 rounded-lg' : ' p-3 border border-gray-200 rounded-lg'} onClick={() => getLeaderboard('image3')}>Image 3</button>
             </div>
 
             <DisplayLeaderboard leaderboard={leaderboard} showLeaderboard={showLeaderboard}/>
