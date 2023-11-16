@@ -1,14 +1,33 @@
 // selection popup
-export default function SelectOptions({ x, y, z, handleFormSubmit, gameImage, handleSelection }) {
+export default function SelectOptions({ x, y, z, imageWidth, imageHeight, handleFormSubmit, gameImage, handleSelection, charactersFound }) {
 
+    // characters in image
     const characterArr = gameImage.characters;
+
+    // characters not found yet
+    let charactersNotFound = characterArr.filter(character => 
+        charactersFound.includes(character.name) === false);
+
+    // determine max values for x and y
+    let x_max = imageWidth * .88;
+    let y_max = imageHeight * .95;
+
+    if (x > x_max) {
+        x = x_max;
+    };
+
+    if (y > y_max) {
+        y = y_max;
+    };
 
     return (
         <>
             <form method="post" className="flex flex-col bg-neutral-300 w-40 absolute" style={{ top: `${y}px`, left: `${x}px`, zIndex: z }} onSubmit={(e) => handleFormSubmit(e)}>
-                <button value={characterArr[0].name} type="submit" onClick={handleSelection}>{characterArr[0].name}</button>
-                <button value={characterArr[1].name} type="submit" onClick={handleSelection}>{characterArr[1].name}</button>
-                <button value={characterArr[2].name} type="submit" onClick={handleSelection}>{characterArr[2].name}</button>
+                {/* create button for each character not found yet */}
+                {charactersNotFound.map(character => {
+                    return <button key={character.name} className="p-2" value={character.name} type="submit" onClick={handleSelection}>{character.name}</button>
+                })}
+
             </form>
         </>
     )
