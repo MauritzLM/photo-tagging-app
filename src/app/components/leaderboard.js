@@ -3,7 +3,7 @@ export default function DisplayLeaderboard({ leaderboard, showLeaderboard }) {
 
     return (
         <>
-            <table className={showLeaderboard === '' ? 'hidden' : 'bg-slate-500 text-white w-full md:w-3/4 border-2 border-black'}>
+            <table className={showLeaderboard === '' ? 'hidden' : 'bg-slate-500 text-white w-full md:w-3/4 border-2 border-gray-200'}>
                 <thead>
                     <tr className="border-b">
                         <th className="p-2">Player</th>
