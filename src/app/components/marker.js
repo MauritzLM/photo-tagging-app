@@ -1,5 +1,17 @@
 
-export default function Marker({ character, x, y, display }) {
+export default function Marker({ character, x, y, display, imageWidth, imageHeight }) {
+
+    // determine max values for x and y
+    let x_max = imageWidth * .92;
+    let y_max = imageHeight * .95;
+
+    if (x > x_max) {
+        x = x_max;
+    };
+
+    if (y > y_max) {
+        y = y_max;
+    };
 
     return (
         <>
