@@ -16,15 +16,15 @@ import { v4 as uuidv4 } from 'uuid';
 export default function Game() {
     // start game state
     const [gameStart, setGameStart] = useState(false);
-    // const [errorMsg, setErrorMsg] = useState('');
+    const [errorMsg, setErrorMsg] = useState('');
 
     // game image selected
     const [gameImage, setGameImage] = useState({ ...image1 });
 
-    // game instance
+    // game instance id and time
     const [gameInstance, setGameInstance] = useState({ id: '', time: '' });
 
-    // number of characters found 
+    // characters found array
     const [charactersFound, setCharactersFound] = useState([]);
 
     // correct selection markers
@@ -65,15 +65,15 @@ export default function Game() {
             if (response.status === 200) {
                 setGameStart(true);
 
+                setErrorMsg('');
+
                 return;
             };
-
-            // what if server error?* message that game wont be recorded
-            // setErrorMsg('server offline')           
 
         }
         catch (error) {
             console.log(error)
+            setErrorMsg('Error: Could not connect to server');
             return;
         }
     }
@@ -133,8 +133,9 @@ export default function Game() {
             let x_percentage = clickCoords.x / imageWidth;
             let y_percetage = clickCoords.y / imageHeight;
 
-            console.log(Math.floor(x_percentage * 100), Math.floor(y_percetage * 100));
+            // console.log(Math.floor(x_percentage * 100), Math.floor(y_percetage * 100));
 
+            console.log(clickCoords.x, clickCoords.y);
             console.log(selectedCharacter)
 
             // form
@@ -182,6 +183,8 @@ export default function Game() {
 
             console.log(result);
 
+            setErrorMsg('');
+
             // change z-index of popup to hide it
             setPopupZIndex(-10);
 
@@ -189,6 +192,7 @@ export default function Game() {
 
         } catch (error) {
             console.log(error);
+            setErrorMsg('Error: Could not connect to server');
             return;
         }
     }
@@ -210,22 +214,23 @@ export default function Game() {
             <>
                 <Nav />
 
-                <main className="flex flex-col items-center">
-                    <h1 className="font-bold text-2xl">Game page</h1>
-                    {/* <p>{errorMsg}</p> */}
-                    <p>select image</p>
+                <main className="flex flex-col items-center relative">
+
+                    <h1 className="my-12 font-semibold text-2xl">select image</h1>
+
+                    <p className="text-rose-600 absolute top-4 right-5">{errorMsg}</p>
 
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 p-4">
 
-                        <picture className="w-96 h-96" onClick={() => handleGameStart(image1)}>
-                            <Image src={image1.src} alt="" width={500} height={500} className="w-full h-full" />
+                        <picture className="w-96 h-96 cursor-pointer" onClick={() => handleGameStart(image1)}>
+                            <Image priority={true} as="image" src={image1.src} alt="" width={500} height={500} className="w-full h-full" />
                         </picture>
 
-                        <picture className="w-96 h-96" onClick={() => handleGameStart(image2)}>
+                        <picture className="w-96 h-96 cursor-pointer" onClick={() => handleGameStart(image2)}>
                             <Image src={image2.src} alt="" width={500} height={500} className="w-full h-full" />
                         </picture>
 
-                        <picture className="w-96 h-96" onClick={() => handleGameStart(image3)}>
+                        <picture className="w-96 h-96 cursor-pointer" onClick={() => handleGameStart(image3)}>
                             <Image src={image3.src} alt="" width={500} height={500} className="w-full h-full" />
                         </picture>
 
@@ -238,6 +243,7 @@ export default function Game() {
             <>
                 <Nav />
                 <main className="flex flex-col items-center gap-7 p-4 relative">
+                    <p className="text-rose-600">{errorMsg}</p>
 
                     <div className="flex flex-col md:flex-row w-full items-center justify-around gap-5">
                         <GameTimer gameStart={gameStart} />
@@ -249,8 +255,8 @@ export default function Game() {
                             <div className="flex items-end md:items-center gap-5">
                                 {gameImage.characters?.map((character, index) =>
 
-                                    <div key={character.name} className="flex flex-col  md:flex-row items-center gap-2">
-                                        <Image src={character.imageSrc} alt={character.name} width={30} height={30} />
+                                    <div key={character.name} className="flex flex-col  md:flex-row items-center gap-2 relative">
+                                        <Image src={character.imageSrc} alt={character.name} height={35} width={35}/>
                                         <p className={charactersFound.includes(character.name) ? 'line-through' : ''} key={`char-${index}`}>{character.name}</p>
                                     </div>
                                     // 
@@ -265,12 +271,12 @@ export default function Game() {
 
                         <GameImage gameImage={gameImage} setCoords={setCoords} setImageWidth={setImageWidth} setImageHeight={setImageHeight} imageWidth={imageWidth} />
 
-                        <SelectOptions x={clickCoords.x} y={clickCoords.y} z={popupZIndex} handleFormSubmit={handleFormSubmit} gameImage={gameImage} handleSelection={handleSelection} />
+                        <SelectOptions x={clickCoords.x} y={clickCoords.y} z={popupZIndex} imageWidth={imageWidth} imageHeight={imageHeight} handleFormSubmit={handleFormSubmit} gameImage={gameImage} handleSelection={handleSelection} charactersFound={charactersFound} />
 
                         {/* update character values to image obj values* */}
-                        <Marker character={gameImage.characters[0].name} x={marker1.x} y={marker1.y} display={marker1.display} />
-                        <Marker character={gameImage.characters[1].name} x={marker2.x} y={marker2.y} display={marker2.display} />
-                        <Marker character={gameImage.characters[2].name} x={marker3.x} y={marker3.y} display={marker3.display} />
+                        <Marker character={gameImage.characters[0].name} x={marker1.x} y={marker1.y} display={marker1.display} imageWidth={imageWidth} imageHeight={imageHeight} />
+                        <Marker character={gameImage.characters[1].name} x={marker2.x} y={marker2.y} display={marker2.display} imageWidth={imageWidth} imageHeight={imageHeight} />
+                        <Marker character={gameImage.characters[2].name} x={marker3.x} y={marker3.y} display={marker3.display} imageWidth={imageWidth} imageHeight={imageHeight} />
                     </div>
                 </main>
 
