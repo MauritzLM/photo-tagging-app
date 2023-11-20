@@ -17,10 +17,15 @@ export default function GameEnd({ handleGameEnd, gameInstance }) {
 
     return (
         <>
-            <h1>GameOver</h1>
-            <span data-testid="time">{("0" + Math.floor((gameInstance.time / 60000) % 60)).slice(-2)}:</span>
-            <span data-testid="time">{("0" + Math.floor((gameInstance.time / 1000) % 60)).slice(-2)}:</span>
-            <span data-testid="time">{("0" + ((gameInstance.time / 10) % 100)).slice(-2)}</span>
+            <h1 className="text-3xl font-bold text-center my-7">Game complete!</h1>
+            <div className="flex gap-4">
+                <p className="self-center my-5">Your time:</p>
+                <div className="self-center">
+                    <span className="text-2xl font-semibold" data-testid="time">{("0" + Math.floor((gameInstance.time / 60000) % 60)).slice(-2)}:</span>
+                    <span className="text-2xl font-semibold" data-testid="time">{("0" + Math.floor((gameInstance.time / 1000) % 60)).slice(-2)}:</span>
+                    <span className="text-2xl font-semibold" data-testid="time">{("0" + ((gameInstance.time / 10) % 100)).slice(-2)}</span>
+                </div>
+            </div>
         </>
     )
 }

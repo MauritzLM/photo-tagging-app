@@ -49,26 +49,27 @@ export default function LeaderboardForm({ gameInstance, handleNewGame }) {
     if (nameUpdated) {
         return (
             <>
-                <p>Your name has been updated. Thank you for playing.</p>
-                <Link href='/leaderboard'>View leaderboards</Link>
-                <button onClick={handleNewGame}>Start a new game</button>
+                <h2 className="my-4 text-xl text-center">Your name has been updated. Thank you for playing.</h2>
+                <Link className="text-blue-600 my-2 underline text-lg hover:no-underline" href='/leaderboard'>View leaderboards</Link>
+                <button className="text-blue-600 underline text-lg hover:no-underline" onClick={handleNewGame}>Start a new game</button>
             </>
         )
     }
      else {
         return (
             <>
-                <h2>Enter your name to submit your time</h2>
-                <form data-testid="leaderboard-form" onSubmit={(e) => handleSubmit(e, gameInstance)} className="flex flex-col items-center gap-4 max-w-md p-4 border-solid border-2" method="post">
+                <p className="my-2">Your time has been recorded, you can add your name in the form below if you would like to.</p>
+    
+                <form data-testid="leaderboard-form" onSubmit={(e) => handleSubmit(e, gameInstance)} className="flex flex-col items-center gap-4 w-full md:w-3/4 lg:w-2/5 p-4 my-5 bg-slate-200" method="post">
 
-                    <div className="flex flex-col gap-2 w-3/5">
-                        <label htmlFor="name">Name</label>
-                        <span>(1-20 characters)</span>
-                        <input type="text" name="name" id="name" className="border-solid border-2 border-black-600" value={playerName} onChange={handleChange} />
+                    <div className="flex flex-col w-3/5">
+                        <label className="font-semibold text-lg" htmlFor="name">Your name <span className="text-xs">(1-20 characters)</span></label>
+                        
+                        <input type="text" name="name" id="name" className="p-2 my-3" value={playerName} onChange={handleChange} />
                         <span data-testid="error-msg">{inputError}</span>
                     </div>
 
-                    <button className="w-3/5">Submit</button>
+                    <button className="w-3/5 bg-black text-white p-2 mb-2">Submit</button>
                 </form>
             </>
         )

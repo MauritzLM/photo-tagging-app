@@ -8,6 +8,7 @@ export default function LeaderboardPage() {
     // leaderboard state
     const [leaderboard, setLeaderboard] = useState([]);
     const [showLeaderboard, setShowLeaderboard] = useState('');
+    const [errorMsg, setErrorMsg] = useState('');
 
     // function to fetch leaderboard
     async function getLeaderboard(image) {
@@ -26,10 +27,12 @@ export default function LeaderboardPage() {
 
             setLeaderboard([...result]);
             setShowLeaderboard(image);
+            setErrorMsg('');
             
         }
         catch (error) {
-            console.log(error)
+            setErrorMsg('Error: failed to connect to server');
+            console.log(error);
         }
     }
 
@@ -41,10 +44,12 @@ export default function LeaderboardPage() {
             <h1 className="font-bold text-2xl text-center my-5">Select a leaderboard to display</h1>
 
             <div className="flex items-center gap-5">
-                <button className={showLeaderboard === 'image1' ? 'bg-slate-500 text-white p-3 border border-gray-200 rounded-lg' : ' p-3 border border-gray-200 rounded-lg'} onClick={() => getLeaderboard('image1')}>Image 1</button>
-                <button className={showLeaderboard === 'image2' ? 'bg-slate-500 text-white p-3 border border-gray-200 rounded-lg' : ' p-3 border border-gray-200 rounded-lg'} onClick={() => getLeaderboard('image2')}>Image 2</button>
-                <button className={showLeaderboard === 'image3' ? 'bg-slate-500 text-white p-3 border border-gray-200 rounded-lg' : ' p-3 border border-gray-200 rounded-lg'} onClick={() => getLeaderboard('image3')}>Image 3</button>
+                <button className={showLeaderboard === 'image1' ? 'bg-slate-200 text-white p-3 border border-gray-200 rounded-sm' : ' p-3 border border-gray-200 rounded-sm'} onClick={() => getLeaderboard('image1')}>Harbour</button>
+                <button className={showLeaderboard === 'image2' ? 'bg-slate-200 text-white p-3 border border-gray-200 rounded-sm' : ' p-3 border border-gray-200 rounded-sm'} onClick={() => getLeaderboard('image2')}>Science</button>
+                <button className={showLeaderboard === 'image3' ? 'bg-slate-200 text-white p-3 border border-gray-200 rounded-sm' : ' p-3 border border-gray-200 rounded-sm'} onClick={() => getLeaderboard('image3')}>Town</button>
             </div>
+
+           <p className="text-rose-600">{errorMsg}</p>
 
             <DisplayLeaderboard leaderboard={leaderboard} showLeaderboard={showLeaderboard}/>
             </main>

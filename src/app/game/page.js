@@ -73,7 +73,7 @@ export default function Game() {
         }
         catch (error) {
             console.log(error)
-            setErrorMsg('Error: Could not connect to server');
+            setErrorMsg('Error: Failed to connect to server');
             return;
         }
     }
@@ -192,7 +192,7 @@ export default function Game() {
 
         } catch (error) {
             console.log(error);
-            setErrorMsg('Error: Could not connect to server');
+            setErrorMsg('Error: Failed to connect to server');
             return;
         }
     }
@@ -202,8 +202,10 @@ export default function Game() {
         return (
             <>
                 <Nav />
+                <main className="flex flex-col items-center p-4">
                 <GameEnd handleGameEnd={handleGameEnd} gameInstance={gameInstance} />
                 <LeaderboardForm image={gameImage.name} gameInstance={gameInstance} handleNewGame={handleNewGame} />
+                </main>
             </>
         )
     }
@@ -218,7 +220,7 @@ export default function Game() {
 
                     <h1 className="my-12 font-semibold text-2xl">select image</h1>
 
-                    <p className="text-rose-600 absolute top-4 right-5">{errorMsg}</p>
+                    <p className="text-rose-600">{errorMsg}</p>
 
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 p-4">
 
@@ -251,7 +253,6 @@ export default function Game() {
                         <div className="flex flex-col gap-4">
                             <p className="text-center text-xl font-medium">characters to find:</p>
 
-                            {/* adjust position of characters to find, maybe add checkbox */}
                             <div className="flex items-end md:items-center gap-5">
                                 {gameImage.characters?.map((character, index) =>
 
@@ -273,7 +274,6 @@ export default function Game() {
 
                         <SelectOptions x={clickCoords.x} y={clickCoords.y} z={popupZIndex} imageWidth={imageWidth} imageHeight={imageHeight} handleFormSubmit={handleFormSubmit} gameImage={gameImage} handleSelection={handleSelection} charactersFound={charactersFound} />
 
-                        {/* update character values to image obj values* */}
                         <Marker character={gameImage.characters[0].name} x={marker1.x} y={marker1.y} display={marker1.display} imageWidth={imageWidth} imageHeight={imageHeight} />
                         <Marker character={gameImage.characters[1].name} x={marker2.x} y={marker2.y} display={marker2.display} imageWidth={imageWidth} imageHeight={imageHeight} />
                         <Marker character={gameImage.characters[2].name} x={marker3.x} y={marker3.y} display={marker3.display} imageWidth={imageWidth} imageHeight={imageHeight} />

@@ -4,7 +4,7 @@ import { useState,useEffect } from "react";
 export default function GameTimer({ gameStart}) {
 
     const [time, setTime] = useState(0);
-    // const [running, setRunning] = useState(true);
+    
     useEffect(() => {
         let interval;
     
