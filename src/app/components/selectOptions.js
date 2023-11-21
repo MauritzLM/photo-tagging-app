@@ -22,10 +22,10 @@ export default function SelectOptions({ x, y, z, imageWidth, imageHeight, handle
 
     return (
         <>
-            <form method="post" className="flex flex-col bg-neutral-300 w-40 absolute" style={{ top: `${y}px`, left: `${x}px`, zIndex: z }} onSubmit={(e) => handleFormSubmit(e)}>
+            <form method="post" className="flex flex-col bg-primary w-40 absolute text-text-secondary rounded-md p-3 border-2" style={{ top: `${y}px`, left: `${x}px`, zIndex: z }} onSubmit={(e) => handleFormSubmit(e)}>
                 {/* create button for each character not found yet */}
                 {charactersNotFound.map(character => {
-                    return <button key={character.name} className="p-2" value={character.name} type="submit" onClick={handleSelection}>{character.name}</button>
+                    return <button key={character.name} className="p-2 font-semibold font-xl hover:underline" value={character.name} type="submit" onClick={handleSelection}>{character.name}</button>
                 })}
 
             </form>

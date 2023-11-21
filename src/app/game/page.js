@@ -3,12 +3,11 @@ import Nav from "../components/nav";
 import GameTimer from "../components/timer";
 import GameImage from "../components/gameImage";
 import SelectOptions from "../components/selectOptions";
-import GameEnd from "../components/gameEnd";
 import LeaderboardForm from "../components/leaderboardForm";
 import Marker from "../components/marker";
 import { updateSelection } from "@/utils/utils";
 import { image1, image2, image3 } from "../../utils/imageData";
-import { useEffect, useState, useRef, useLayoutEffect } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import { v4 as uuidv4 } from 'uuid';
 

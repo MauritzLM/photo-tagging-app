@@ -5,8 +5,8 @@ import Link from 'next/link'
 export default function Home() {
   return (
     <>
-      <Nav />
-      <main className="flex flex-col items-center gap-5">
+      <Nav currentPage={'home'}/>
+      <main className="flex flex-col items-center gap-5 text-text-secondary">
 
         <h1 className="text-center font-bold text-4xl my-12">Photo tagging app</h1>
 
@@ -14,7 +14,7 @@ export default function Home() {
 
           <h2 className='font-bold text-2xl my-2'>Game instructions</h2>
           <ol className="p-4 list-decimal">
-            <li className="my-2">On the <Link className='underline text-blue-500 hover:no-underline' href="/game">game page</Link> select an image</li>
+            <li className="my-2">On the <Link className='underline text-link hover:no-underline' href="/game">game page</Link> select an image</li>
             <li className="my-2">Find all three characters by clicking on them and selecting the correct option</li>
             <li className="my-2">Once you have found all three characters the game is over and you have an option to add your name to the leaderboard</li>
           </ol>

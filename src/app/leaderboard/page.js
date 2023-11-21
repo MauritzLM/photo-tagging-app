@@ -38,18 +38,18 @@ export default function LeaderboardPage() {
 
     return (
         <>
-            <Nav />
+            <Nav currentPage={'leaderboard'}/>
             
-            <main className="flex flex-col items-center gap-5 p-4">
-            <h1 className="font-bold text-2xl text-center my-5">Select a leaderboard to display</h1>
+            <main className="flex flex-col items-center gap-10 p-4 text-text-secondary">
+            <h1 className="font-bold text-3xl text-center my-8">Select a leaderboard to display</h1>
 
-            <div className="flex items-center gap-5">
-                <button className={showLeaderboard === 'image1' ? 'bg-slate-200 text-white p-3 border border-gray-200 rounded-sm' : ' p-3 border border-gray-200 rounded-sm'} onClick={() => getLeaderboard('image1')}>Harbour</button>
-                <button className={showLeaderboard === 'image2' ? 'bg-slate-200 text-white p-3 border border-gray-200 rounded-sm' : ' p-3 border border-gray-200 rounded-sm'} onClick={() => getLeaderboard('image2')}>Science</button>
-                <button className={showLeaderboard === 'image3' ? 'bg-slate-200 text-white p-3 border border-gray-200 rounded-sm' : ' p-3 border border-gray-200 rounded-sm'} onClick={() => getLeaderboard('image3')}>Town</button>
+            <div className="flex items-center gap-5 w-5/6 lg:w-1/2">
+                <button className={showLeaderboard === 'image1' ? 'bg-secondary text-text-primary font-semibold p-3 border border-secondary rounded-sm w-1/3' : ' p-3 border border-secondary rounded-sm w-1/3 hover:bg-secondary'} onClick={() => getLeaderboard('image1')}>Harbour</button>
+                <button className={showLeaderboard === 'image2' ? 'bg-secondary text-text-primary font-semibold p-3 border border-secondary rounded-sm w-1/3' : ' p-3 border border-secondary rounded-sm w-1/3 hover:bg-secondary'} onClick={() => getLeaderboard('image2')}>Science</button>
+                <button className={showLeaderboard === 'image3' ? 'bg-secondary text-text-primary font-semibold p-3 border border-secondary rounded-sm w-1/3' : ' p-3 border border-secondary rounded-sm w-1/3 hover:bg-secondary'} onClick={() => getLeaderboard('image3')}>Town</button>
             </div>
 
-           <p className="text-rose-600">{errorMsg}</p>
+           <p className="text-error">{errorMsg}</p>
 
             <DisplayLeaderboard leaderboard={leaderboard} showLeaderboard={showLeaderboard}/>
             </main>
