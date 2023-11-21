@@ -201,10 +201,9 @@ export default function Game() {
     if (charactersFound.length === 3) {
         return (
             <>
-                <Nav />
-                <main className="flex flex-col items-center p-4">
-                <GameEnd handleGameEnd={handleGameEnd} gameInstance={gameInstance} />
-                <LeaderboardForm image={gameImage.name} gameInstance={gameInstance} handleNewGame={handleNewGame} />
+                <Nav currentPage={'game'} />
+                <main className="flex flex-col items-center p-4 text-text-secondary">
+                    <LeaderboardForm image={gameImage.name} handleGameEnd={handleGameEnd} gameInstance={gameInstance} handleNewGame={handleNewGame} />
                 </main>
             </>
         )
@@ -214,25 +213,25 @@ export default function Game() {
     if (!gameStart) {
         return (
             <>
-                <Nav />
+                <Nav currentPage={'game'} />
 
-                <main className="flex flex-col items-center relative">
+                <main className="flex flex-col items-center gap-6 relative text-text-secondary">
 
-                    <h1 className="my-12 font-semibold text-2xl">select image</h1>
+                    <h1 className="mt-12 font-semibold text-3xl">Select an image to play</h1>
 
-                    <p className="text-rose-600">{errorMsg}</p>
+                    <p className="text-error">{errorMsg}</p>
 
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 p-4">
+                    <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 p-4">
 
-                        <picture className="w-96 h-96 cursor-pointer" onClick={() => handleGameStart(image1)}>
+                        <picture className="w-80 h-80 md:w-96 md:h-96 cursor-pointer" onClick={() => handleGameStart(image1)}>
                             <Image priority={true} as="image" src={image1.src} alt="" width={500} height={500} className="w-full h-full" />
                         </picture>
 
-                        <picture className="w-96 h-96 cursor-pointer" onClick={() => handleGameStart(image2)}>
+                        <picture className="w-80 h-80 md:w-96 md:h-96 cursor-pointer" onClick={() => handleGameStart(image2)}>
                             <Image src={image2.src} alt="" width={500} height={500} className="w-full h-full" />
                         </picture>
 
-                        <picture className="w-96 h-96 cursor-pointer" onClick={() => handleGameStart(image3)}>
+                        <picture className="w-80 h-80 md:w-96 md:h-96 cursor-pointer" onClick={() => handleGameStart(image3)}>
                             <Image src={image3.src} alt="" width={500} height={500} className="w-full h-full" />
                         </picture>
 
@@ -243,9 +242,9 @@ export default function Game() {
     } else {
         return (
             <>
-                <Nav />
-                <main className="flex flex-col items-center gap-7 p-4 relative">
-                    <p className="text-rose-600">{errorMsg}</p>
+                <Nav currentPage={'game'} />
+                <main className="flex flex-col items-center gap-7 p-4 relative text-text-secondary">
+                    <p className="text-error">{errorMsg}</p>
 
                     <div className="flex flex-col md:flex-row w-full items-center justify-around gap-5">
                         <GameTimer gameStart={gameStart} />
@@ -257,7 +256,7 @@ export default function Game() {
                                 {gameImage.characters?.map((character, index) =>
 
                                     <div key={character.name} className="flex flex-col  md:flex-row items-center gap-2 relative">
-                                        <Image src={character.imageSrc} alt={character.name} height={35} width={35}/>
+                                        <Image src={character.imageSrc} alt={character.name} height={35} width={35} />
                                         <p className={charactersFound.includes(character.name) ? 'line-through' : ''} key={`char-${index}`}>{character.name}</p>
                                     </div>
                                     // 
