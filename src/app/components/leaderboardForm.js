@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
+import GameEnd from "./gameEnd";
 
-export default function LeaderboardForm({ gameInstance, handleNewGame }) {
+export default function LeaderboardForm({ handleGameEnd, gameInstance, handleNewGame }) {
 
     const [playerName, setPlayerName] = useState('');
     const [inputError, setInputError] = useState('');
@@ -50,26 +51,28 @@ export default function LeaderboardForm({ gameInstance, handleNewGame }) {
         return (
             <>
                 <h2 className="my-4 text-xl text-center">Your name has been updated. Thank you for playing.</h2>
-                <Link className="text-blue-600 my-2 underline text-lg hover:no-underline" href='/leaderboard'>View leaderboards</Link>
-                <button className="text-blue-600 underline text-lg hover:no-underline" onClick={handleNewGame}>Start a new game</button>
+                <Link className="text-link my-2 underline text-lg hover:no-underline" href='/leaderboard'>View leaderboards</Link>
+                <button className="text-link underline text-lg hover:no-underline" onClick={handleNewGame}>Start a new game</button>
             </>
         )
     }
-     else {
+    else {
         return (
             <>
-                <p className="my-2">Your time has been recorded, you can add your name in the form below if you would like to.</p>
-    
-                <form data-testid="leaderboard-form" onSubmit={(e) => handleSubmit(e, gameInstance)} className="flex flex-col items-center gap-4 w-full md:w-3/4 lg:w-2/5 p-4 my-5 bg-slate-200" method="post">
 
-                    <div className="flex flex-col w-3/5">
+                <GameEnd handleGameEnd={handleGameEnd} gameInstance={gameInstance} />
+
+                {/* form to enter name */}
+                <form data-testid="leaderboard-form" onSubmit={(e) => handleSubmit(e, gameInstance)} className="flex flex-col items-center gap-4 w-full md:w-2/4 lg:w-2/5 p-4 mt-12 bg-slate-200" method="post">
+
+                    <div className="flex flex-col w-full">
                         <label className="font-semibold text-lg" htmlFor="name">Your name <span className="text-xs">(1-20 characters)</span></label>
-                        
-                        <input type="text" name="name" id="name" className="p-2 my-3" value={playerName} onChange={handleChange} />
+
+                        <input type="text" name="name" id="name" className="p-2 my-3 text-text-primary" value={playerName} onChange={handleChange} />
                         <span data-testid="error-msg">{inputError}</span>
                     </div>
 
-                    <button className="w-3/5 bg-black text-white p-2 mb-2">Submit</button>
+                    <button className="w-full border-2 text-text-secondary py-3 mb-2 hover:bg-secondary hover:text-text-primary">Submit</button>
                 </form>
             </>
         )
