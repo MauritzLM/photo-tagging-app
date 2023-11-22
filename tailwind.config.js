@@ -15,12 +15,12 @@ module.exports = {
     },
     colors: {
       current: 'currentColor',
-      'primary': '#040D12',
-      'secondary': '#CBE4DE',
+      'primary': '#212121',
+      'secondary': '#6D9886',
       'text-primary': '#000',
       'text-secondary': '#fff',
       'marker': '#2C3333',
-      'link': '#26A7D9',
+      'link': '#47B5FF',
       'error': '#DA2B25'
     }
   },
