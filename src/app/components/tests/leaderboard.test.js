@@ -10,17 +10,19 @@ const leaderboard = [
 
 describe('leaderboard display', () => {
 
-    test('rendering with empty leaderboard', () => {
+    test('rendering with empty leaderboard', async () => {
         render(<DisplayLeaderboard leaderboard={[]}/>);
 
-        expect(screen.getByRole('heading').textContent).toMatch(/leaderboard/i);
+        const array = await screen.findAllByTestId('row');
+
+        expect(array).toHaveLength(1);
     });
 
     test('renders leaderboard', async () => {
        render(<DisplayLeaderboard leaderboard={leaderboard}/>);
 
-       const array = await screen.findAllByRole('listitem');
+       const array = await screen.findAllByTestId('row');
 
-       expect(array).toHaveLength(3);
+       expect(array).toHaveLength(4);
     });
 });

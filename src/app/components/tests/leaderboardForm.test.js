@@ -7,13 +7,14 @@ import { mockFetch, mockFetchError } from './mocks/mock-fetch';
 
 // submit function?
 // mocks
+let handleGameEndMock = jest.fn();
 let handleNewGameMock = jest.fn();
 let gameInstanceMock = { id: 1, time: 10000 };
 
 describe('Leaderboard form', () => {
 
     test('renders correctly', () => {
-        render(<LeaderboardForm handleNewGame={handleNewGameMock} gameInstance={gameInstanceMock} />);
+        render(<LeaderboardForm handleGameEnd={handleGameEndMock} handleNewGame={handleNewGameMock} gameInstance={gameInstanceMock} />);
         expect(screen.getByTestId('leaderboard-form')).toBeInTheDocument();
     });
 
@@ -27,7 +28,7 @@ describe('Leaderboard form', () => {
         // state change
         test('submitting form changes state', async () => {
             const user = userEvent.setup();
-            render(<LeaderboardForm handleNewGame={handleNewGameMock} gameInstance={gameInstanceMock} />);
+            render(<LeaderboardForm handleGameEnd={handleGameEndMock} handleNewGame={handleNewGameMock} gameInstance={gameInstanceMock} />);
             const submitButton = screen.getByRole('button');
             await user.click(submitButton);
             expect(screen.getByText('Start a new game')).toBeInTheDocument();
@@ -37,7 +38,7 @@ describe('Leaderboard form', () => {
         test('clicking new game button calls function correctly', async () => {
             const user = userEvent.setup();
 
-            render(<LeaderboardForm handleNewGame={handleNewGameMock} gameInstance={gameInstanceMock} />);
+            render(<LeaderboardForm handleGameEnd={handleGameEndMock} handleNewGame={handleNewGameMock} gameInstance={gameInstanceMock} />);
             
             const submitButton = screen.getByRole('button');
             await user.click(submitButton);
@@ -60,7 +61,7 @@ describe('Leaderboard form', () => {
         // error display
         test('form error display', async () => {
             const user = userEvent.setup();
-            render(<LeaderboardForm handleNewGame={handleNewGameMock} gameInstance={gameInstanceMock} />);
+            render(<LeaderboardForm handleGameEnd={handleGameEndMock} handleNewGame={handleNewGameMock} gameInstance={gameInstanceMock} />);
         
             await user.click(screen.getByRole('button'));
 

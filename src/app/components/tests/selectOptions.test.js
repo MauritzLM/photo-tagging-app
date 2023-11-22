@@ -11,24 +11,25 @@ let handleSelectionMock = jest.fn();
 let gameImageMock = {
     src: '',
     name: 'image1',
-    characters: ['walrus', 'lion', 'bear']
+    characters: [{ name: 'walrus' }, { name: 'lion' }, { name: 'bear' }]
 };
+let charactersFoundMock = ['lion'];
 
 describe('select options component', () => {
     test('rendering of component', async () => {
-        render(<SelectOptions x={x} y={y} z={z} handleFormSubmit={handleFormSubmitMock} handleSelection={handleSelectionMock} gameImage={gameImageMock} />);
+        render(<SelectOptions x={x} y={y} z={z} imageWidth={500} imageHeight={500} handleFormSubmit={handleFormSubmitMock} handleSelection={handleSelectionMock} gameImage={gameImageMock} charactersFound={charactersFoundMock} />);
 
         // get all buttons
         const buttons = await screen.findAllByRole('button');
 
-        expect(buttons).toHaveLength(3);
-        expect(buttons[1].textContent).toBe('lion');
+        expect(buttons).toHaveLength(2);
+        expect(buttons[1].textContent).toBe('bear');
 
     });
 
     test('clicking on button calls functions correctly', async () => {
         const user = userEvent.setup();
-        render(<SelectOptions x={x} y={y} z={z} handleFormSubmit={handleFormSubmitMock} handleSelection={handleSelectionMock} gameImage={gameImageMock} />);
+        render(<SelectOptions x={x} y={y} z={z} imageWidth={500} imageHeight={500} handleFormSubmit={handleFormSubmitMock} handleSelection={handleSelectionMock} gameImage={gameImageMock} charactersFound={charactersFoundMock} />);
 
         const buttons = await screen.findAllByRole('button');
 
