@@ -214,9 +214,9 @@ export default function Game() {
             <>
                 <Nav currentPage={'game'} />
 
-                <main className="flex flex-col items-center gap-6 relative text-text-secondary">
+                <main className="flex flex-col items-center gap-10 relative text-text-secondary">
 
-                    <h1 className="mt-12 font-semibold text-3xl">Select an image to play</h1>
+                    <h1 className="mt-14 font-bold text-3xl">Select an image to play</h1>
 
                     <p className="text-error">{errorMsg}</p>
 

@@ -6,11 +6,11 @@ export default function Home() {
   return (
     <>
       <Nav currentPage={'home'}/>
-      <main className="flex flex-col items-center gap-5 text-text-secondary">
+      <main className="flex flex-col items-center gap-14 text-text-secondary p-4">
 
-        <h1 className="text-center font-bold text-4xl my-12">Photo tagging app</h1>
+        <h1 className="text-center font-bold text-4xl mt-14">Photo tagging app</h1>
 
-        <section className="max-w-[70%] flex flex-col items-center gap-5">
+        <section className="max-w-xl flex flex-col items-center gap-5">
 
           <h2 className='font-bold text-2xl my-2'>Game instructions</h2>
           <ol className="p-4 list-decimal">

@@ -17,7 +17,7 @@ export default function GameEnd({ handleGameEnd, gameInstance }) {
 
     return (
         <>
-            <h1 className="text-3xl font-bold text-center my-7">Game complete!</h1>
+            <h1 className="text-3xl font-bold text-center my-14">Game complete!</h1>
 
             <p className="my-4 text-lg">Your time : <span className="text-2xl font-semibold" data-testid="time">{("0" + Math.floor((gameInstance.time / 60000) % 60)).slice(-2)}:</span>
                 <span className="text-2xl font-semibold" data-testid="time">{("0" + Math.floor((gameInstance.time / 1000) % 60)).slice(-2)}:</span>
