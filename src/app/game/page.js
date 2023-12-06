@@ -53,7 +53,7 @@ export default function Game() {
 
         try {
             // send req to record start time
-            let response = await fetch('http://localhost:3002/gamestart', {
+            let response = await fetch('http://phototagdb-env.eba-ndhc3gvj.eu-north-1.elasticbeanstalk.com/gamestart', {
                 method: 'post',
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
@@ -81,7 +81,7 @@ export default function Game() {
     async function handleGameEnd(id) {
         try {
             // send request to server to calculate time
-            let response = await fetch('http://localhost:3002/gameend', {
+            let response = await fetch('http://phototagdb-env.eba-ndhc3gvj.eu-north-1.elasticbeanstalk.com/gameend', {
                 method: 'post',
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
@@ -149,7 +149,7 @@ export default function Game() {
             };
 
             // fetch request to check selection made by user
-            let response = await fetch('http://localhost:3002/gameimage', {
+            let response = await fetch('http://phototagdb-env.eba-ndhc3gvj.eu-north-1.elasticbeanstalk.com/gameimage', {
                 method: form.method,
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
