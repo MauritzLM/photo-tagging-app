@@ -14,7 +14,7 @@ export default function LeaderboardPage() {
     async function getLeaderboard(image) {
         try {
 // http://phototagdb-env.eba-ndhc3gvj.eu-north-1.elasticbeanstalk.com/
-            const respone = await fetch('http://phototagdb-env.eba-ndhc3gvj.eu-north-1.elasticbeanstalk.com/getleaderboard', {
+            const respone = await fetch('https://phototagdb-env.eba-ndhc3gvj.eu-north-1.elasticbeanstalk.com/getleaderboard', {
                 method: 'post',
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
