@@ -22,7 +22,7 @@ export default function LeaderboardForm({ handleGameEnd, gameInstance, handleNew
             const form = event.target;
 
             // post request to /leaderboard -> send player_name and game id
-            const response = await fetch('https://phototagdb-env.eba-ndhc3gvj.eu-north-1.elasticbeanstalk.com/leaderboard', {
+            const response = await fetch('https://photo-tagging-server-production.up.railway.app/leaderboard', {
                 method: form.method,
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'

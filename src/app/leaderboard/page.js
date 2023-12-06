@@ -13,8 +13,9 @@ export default function LeaderboardPage() {
     // function to fetch leaderboard
     async function getLeaderboard(image) {
         try {
+            // https://photo-tagging-server-production.up.railway.app/
 // http://phototagdb-env.eba-ndhc3gvj.eu-north-1.elasticbeanstalk.com/
-            const respone = await fetch('https://phototagdb-env.eba-ndhc3gvj.eu-north-1.elasticbeanstalk.com/getleaderboard', {
+            const respone = await fetch('https://photo-tagging-server-production.up.railway.app/getleaderboard', {
                 method: 'post',
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
